@@ -31,6 +31,7 @@ from datetime import UTC, datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
+from typing import Any
 
 # Add project root and src/ to path for imports
 _project_root = Path(__file__).parent.parent.resolve()
@@ -100,7 +101,7 @@ def _make_email(
 # Test email definitions
 # ---------------------------------------------------------------------------
 
-TEST_EMAILS: list[dict] = [
+TEST_EMAILS: list[dict[str, Any]] = [
     # Category: Work - should get REPLY
     {
         "label": "Work",
@@ -253,7 +254,7 @@ TEST_EMAILS: list[dict] = [
 # ---------------------------------------------------------------------------
 
 
-def _get_gmail_client():
+def _get_gmail_client() -> tuple[Any, str]:
     """Build authenticated Gmail client.
 
     Returns:
@@ -269,7 +270,7 @@ def _get_gmail_client():
     return service, "me"
 
 
-def _create_label(service, label_name: str) -> str | None:
+def _create_label(service: Any, label_name: str) -> str | None:
     """Create a Gmail label, return label ID.
 
     Returns:
@@ -277,33 +278,33 @@ def _create_label(service, label_name: str) -> str | None:
     """
     try:
         label = service.users().labels().create(userId="me", body={"name": label_name}).execute()
-        return label["id"]
+        return label["id"]  # type: ignore[no-any-return]
     except Exception:
         # Label might already exist
         return None
 
 
-def _get_or_create_label(service, label_name: str) -> str:
+def _get_or_create_label(service: Any, label_name: str) -> str:
     """Get or create a label, return label ID."""
     # List existing labels
     response = service.users().labels().list(userId="me").execute()
     for label in response.get("labels", []):
         if label["name"] == label_name:
-            return label["id"]
+            return label["id"]  # type: ignore[no-any-return]
 
     # Create new label
     new_label = service.users().labels().create(userId="me", body={"name": label_name}).execute()
-    return new_label["id"]
+    return new_label["id"]  # type: ignore[no-any-return]
 
 
-def _send_email(service, raw_message: dict) -> str:
+def _send_email(service: Any, raw_message: dict[str, Any]) -> str:
     """Send a raw email via Gmail API.
 
     Returns:
         Message ID.
     """
     result = service.users().messages().send(userId="me", body=raw_message).execute()
-    return result["id"]
+    return result["id"]  # type: ignore[no-any-return]
 
 
 # ---------------------------------------------------------------------------

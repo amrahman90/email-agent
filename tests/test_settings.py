@@ -75,7 +75,7 @@ def test_agent_settings_importance_threshold_validation() -> None:
         settings = AgentSettings(
             categories=["WORK"],
             important_senders=["test@example.com"],
-            importance_threshold=threshold,
+            importance_threshold=threshold,  # type: ignore[arg-type]
         )
         assert settings.importance_threshold == threshold
 
@@ -83,7 +83,7 @@ def test_agent_settings_importance_threshold_validation() -> None:
         AgentSettings(
             categories=["WORK"],
             important_senders=["test@example.com"],
-            importance_threshold="invalid",
+            importance_threshold="invalid",  # type: ignore[arg-type]
         )
 
 

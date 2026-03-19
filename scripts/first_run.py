@@ -298,7 +298,7 @@ def _create_gmail_labels(categories: list[str]) -> tuple[bool, str]:
         for category in categories:
             label_name = normalize_label_name(category)
             try:
-                client.create_label(label_name)
+                client.create_label(label_name)  # type: ignore[attr-defined]
                 print(f"    Created: {label_name}")
             except Exception as e:
                 print(f"    Skipped {label_name}: {e}")
@@ -342,7 +342,7 @@ def main() -> int:
 
     # Step 2: Authorization
     _print_step(2, total_steps, "Gmail Authorization")
-    auth_ok, auth_msg = _run_gmail_auth(cred_path)
+    auth_ok, auth_msg = _run_gmail_auth(cred_path)  # type: ignore[arg-type]
     print(f"  {auth_msg}")
     if not auth_ok:
         print("\n  ERROR: Gmail authorization failed.")

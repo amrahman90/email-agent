@@ -68,7 +68,7 @@ Mock Ollama responses for testing LLM integration.
 ```python
 def test_label_normalization():
     from email_agent.gmail.labels import normalize_label_name
-    
+
     assert normalize_label_name("Work") == "work"
     assert normalize_label_name("🔥 Work") == "work"
 ```
@@ -78,10 +78,10 @@ def test_label_normalization():
 ```python
 def test_pipeline_with_mocked_apis(mock_gmail_client, mock_ollama):
     from email_agent.workflows.pipeline import Pipeline
-    
+
     pipeline = Pipeline(gmail=mock_gmail_client, ollama=mock_ollama)
     results = pipeline.run_triage_phase(emails)
-    
+
     assert len(results) > 0
 ```
 

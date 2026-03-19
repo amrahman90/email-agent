@@ -260,9 +260,9 @@ for email in emails:
     except Exception as exc:
         LOGGER.warning("Triage failed for %s, defaulting to IGNORE: %s", email_id, exc)
         decision = TriageDecision(action="IGNORE", category="UNCATEGORIZED", ...)
-    
+
     decision = apply_business_rules(decision, email)
-    
+
     try:
         apply_label(email_id, decision.category)
     except Exception as exc:
@@ -518,7 +518,7 @@ If a poll cycle takes longer than `polling_interval`, next cycle waits for compl
 class PollingTrigger:
     def __init__(self):
         self._lock = threading.Lock()
-    
+
     def run_cycle(self):
         with self._lock:
             # Full poll cycle here

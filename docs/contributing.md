@@ -79,10 +79,10 @@ Follow Google style:
 ```python
 def triage_email(email: Email) -> TriageDecision:
     """Triage an email using LLM and business rules.
-    
+
     Args:
         email: The email to triage.
-        
+
     Returns:
         TriageDecision with action, category, and confidence.
     """

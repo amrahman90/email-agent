@@ -68,7 +68,7 @@ def test_half_open_success_closes_circuit(
 
     cb = circuit_breaker
     mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
-    mock_time.monotonic.return_value = cb._opened_at + 60.0
+    mock_time.monotonic.return_value = cb._opened_at + 60.0  # type: ignore[operator]
     _ = circuit_breaker.state
 
     circuit_breaker.record_success()
@@ -84,7 +84,7 @@ def test_half_open_failure_reopens_circuit(
 
     cb = circuit_breaker
     mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
-    mock_time.monotonic.return_value = cb._opened_at + 60.0
+    mock_time.monotonic.return_value = cb._opened_at + 60.0  # type: ignore[operator]
     _ = circuit_breaker.state
 
     circuit_breaker.record_failure()
@@ -102,11 +102,11 @@ def test_time_based_transition_open_to_half_open(
 
     cb = circuit_breaker
     mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
-    mock_time.monotonic.return_value = cb._opened_at + 60.0
+    mock_time.monotonic.return_value = cb._opened_at + 60.0  # type: ignore[operator]
 
     _ = circuit_breaker.state
 
-    assert circuit_breaker.state == CircuitState.HALF_OPEN
+    assert circuit_breaker.state == CircuitState.HALF_OPEN  # type: ignore[comparison-overlap]
 
 
 def test_reset_restores_closed_state(circuit_breaker: CircuitBreaker) -> None:
@@ -118,7 +118,7 @@ def test_reset_restores_closed_state(circuit_breaker: CircuitBreaker) -> None:
 
     circuit_breaker.reset()
 
-    assert circuit_breaker.state == CircuitState.CLOSED
+    assert circuit_breaker.state == CircuitState.CLOSED  # type: ignore[comparison-overlap]
     assert circuit_breaker.failure_count == 0
 
 
@@ -139,7 +139,7 @@ def test_is_half_open_returns_true_when_half_open(
 
     cb = circuit_breaker
     mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
-    mock_time.monotonic.return_value = cb._opened_at + 60.0
+    mock_time.monotonic.return_value = cb._opened_at + 60.0  # type: ignore[operator]
 
     _ = circuit_breaker.state
 
@@ -155,7 +155,7 @@ def test_multiple_successes_in_half_open_closes_circuit(
 
     cb = circuit_breaker
     mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
-    mock_time.monotonic.return_value = cb._opened_at + 60.0
+    mock_time.monotonic.return_value = cb._opened_at + 60.0  # type: ignore[operator]
     _ = circuit_breaker.state
 
     circuit_breaker.record_success()
