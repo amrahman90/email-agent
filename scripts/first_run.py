@@ -22,7 +22,6 @@ Exit codes:
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -103,9 +102,11 @@ def _check_gmail_credentials() -> tuple[bool, Path | None]:
         return False, None
 
 
-# ---------------------------------------------------------------------------
-# Step 2: Gmail OAuth2 Authorization
-# ---------------------------------------------------------------------------
+_GMAIL_SCOPES = [
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.labels",
+    "https://www.googleapis.com/auth/gmail.compose",
+]
 
 
 def _run_gmail_auth(credentials_path: Path) -> tuple[bool, str]:
@@ -118,19 +119,13 @@ def _run_gmail_auth(credentials_path: Path) -> tuple[bool, str]:
         from google_auth_oauthlib.flow import InstalledAppFlow
 
         # Define required scopes
-        SCOPES = [
-            "https://www.googleapis.com/auth/gmail.readonly",
-            "https://www.googleapis.com/auth/gmail.labels",
-            "https://www.googleapis.com/auth/gmail.compose",
-        ]
-
         print("\n  Opening browser for Google authorization...")
         print("  If a browser doesn't open, visit the URL shown in the console.")
 
         # Use installed app flow (opens browser automatically)
         flow = InstalledAppFlow.from_client_secrets_file(
             str(credentials_path),
-            SCOPES,
+            _GMAIL_SCOPES,
         )
 
         # Run local server for callback (will print URL if no browser)
@@ -377,7 +372,7 @@ def main() -> int:
         config_data = yaml.safe_load(f)
     categories = config_data.get("agent", {}).get("categories", [])
     if gmail_ok:
-        labels_ok, labels_msg = _create_gmail_labels(categories)
+        _labels_ok, labels_msg = _create_gmail_labels(categories)
         print(f"  {labels_msg}")
     else:
         print("  Skipped (Gmail not connected).")
@@ -401,7 +396,7 @@ if __name__ == "__main__":
         raise SystemExit(main())
     except KeyboardInterrupt:
         print("\n\nSetup cancelled.")
-        raise SystemExit(1)
+        raise SystemExit(1) from None
     except Exception as exc:
         print(f"\nUnexpected error: {exc}")
-        raise SystemExit(4)
+        raise SystemExit(4) from exc

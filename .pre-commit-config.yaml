@@ -50,17 +50,18 @@ repos:
   # MyPy: Static type checking
   # -----------------------------------------------------------------------
   # Static type checker for Python. Catches type errors before runtime.
+  # Uses uv run to respect project pyproject.toml configuration.
   # See: https://mypy.readthedocs.io/
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: "v1.13.0"
+  - repo: local
     hooks:
       - id: mypy
-        additional_dependencies:
-          - pydantic>=2.0.0
-          - pydantic-settings>=2.0.0
-          - structlog>=24.0.0
-          - tenacity>=8.0.0
-        args: [--strict, --ignore-missing-imports]
+        name: mypy
+        description: Run mypy type checker using uv
+        entry: uv run mypy
+        language: system
+        types: [python]
+        args: [src/, tests/, scripts/]
+        pass_filenames: false
 
   # -----------------------------------------------------------------------
   # Trailing whitespace fixer

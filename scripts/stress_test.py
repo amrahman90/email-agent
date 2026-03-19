@@ -27,7 +27,7 @@ import argparse
 import base64
 import json
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
@@ -76,7 +76,7 @@ def _make_email(
     msg["To"] = to_addr
 
     # Add date header
-    now = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S +0000")
+    now = datetime.now(UTC).strftime("%a, %d %b %Y %H:%M:%S +0000")
     msg["Date"] = now
 
     if thread_id:
@@ -347,7 +347,7 @@ def main() -> int:
 
     # Authenticate
     try:
-        service, user_id = _get_gmail_client()
+        service, _user_id = _get_gmail_client()
         print("[OK] Gmail authentication successful.")
     except Exception as exc:
         print(f"[ERROR] Gmail authentication failed: {exc}")
@@ -427,7 +427,7 @@ def main() -> int:
     with open(test_ids_file, "w") as f:
         json.dump({"ids": created_ids, "label": test_label}, f)
     print(f"  Test IDs saved to: {test_ids_file}")
-    print(f"  Run with --clear to remove test emails.")
+    print("  Run with --clear to remove test emails.")
 
     return 0 if errors == 0 else 2
 
