@@ -90,7 +90,7 @@ jobs:
 
       - name: Run pytest
         run: |
-          uv run pytest tests/ --cov=src/email_agent --cov-report=term-missing --cov-report=xml
+          uv run pytest tests/ --cov=email_agent --cov-report=term-missing --cov-report=xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
