@@ -86,6 +86,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv sync --all-extras --dev
+          uv pip install -e . --no-build
 
       - name: Run pytest
         run: |
