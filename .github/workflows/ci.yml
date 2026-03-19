@@ -123,6 +123,7 @@ jobs:
 
       - name: Install pre-commit hooks
         run: |
+          uv sync --all-extras --dev
           uv run pre-commit install
 
       - name: Run pre-commit hooks
