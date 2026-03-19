@@ -48,15 +48,15 @@ jobs:
 
       - name: Run ruff check
         run: |
-          uv run ruff check src/
+          uv run ruff check email_agent/
 
       - name: Run ruff format check
         run: |
-          uv run ruff format --check src/
+          uv run ruff format --check email_agent/
 
       - name: Run mypy type check
         run: |
-          uv run mypy src/
+          uv run mypy email_agent/
 
   # -----------------------------------------------------------------------
   # Test Suite

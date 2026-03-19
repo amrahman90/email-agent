@@ -27,7 +27,7 @@ repos:
           drafts - never sends emails automatically.
         language: pygrep
         entry: '\.send\('
-        files: '^src/'
+        files: '^email_agent/'
         exclude_types:
           - markdown
           - yaml
@@ -60,7 +60,7 @@ repos:
         entry: uv run mypy
         language: system
         types: [python]
-        args: [src/, tests/, scripts/]
+        args: [email_agent/, tests/, scripts/]
         pass_filenames: false
 
   # -----------------------------------------------------------------------
