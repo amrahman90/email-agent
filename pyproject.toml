@@ -51,7 +51,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-find = "src"
+packages = ["src/email_agent"]
 
 [tool.hatch.build.targets.sdist]
 include = [
