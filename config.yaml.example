@@ -1,0 +1,60 @@
+# Email Agent Configuration
+#
+# Copy this file to config.yaml and fill in your values.
+# See docs/configuration.md for full reference.
+#
+# IMPORTANT: Never commit config.yaml to git — it may contain sensitive data.
+# The credentials/ directory is gitignored; credentials.json is NOT in git.
+
+gmail:
+  # Path to your OAuth2 credentials file (from Google Cloud Console)
+  # Create at: https://console.cloud.google.com/apis/credentials
+  credentials_path: "credentials/credentials.json"
+
+  # Path where the OAuth token will be cached (auto-created on first run)
+  token_path: "credentials/token.json"
+
+ollama:
+  # Ollama API endpoint
+  base_url: "http://localhost:11434"
+
+  # Model to use (must be pulled locally: `ollama pull llama3.2:1b`)
+  model: "llama3.2:1b"
+
+  # Request timeout in seconds
+  timeout: 120
+
+agent:
+  # Email categories (Gmail labels). These must match your Gmail label names.
+  # Max 20 unique categories (case-insensitive uniqueness enforced).
+  categories:
+    - "Work"
+    - "Personal"
+    - "Finance"
+    - "Social"
+    - "Promotions"
+    - "Spam"
+
+  # Senders that always get draft replies (case-insensitive).
+  # Use full emails (user@example.com) or domain wildcards (@example.com).
+  important_senders:
+    - "boss@company.com"
+    - "hr@company.com"
+
+  # Minimum importance level to trigger draft reply creation.
+  # Options: low (all REPLY emails), medium (REPLY + important_senders), high (important_senders only)
+  importance_threshold: "medium"
+
+  # Maximum emails to process per polling cycle.
+  # Excess emails are logged as warning; next poll will catch them.
+  max_emails_per_batch: 50
+
+  # Only process unread emails newer than this many days.
+  # 0 = no limit (WARNING: may process all historical emails on first run)
+  email_age_limit_days: 7
+
+  # Maximum words in auto-generated draft reply.
+  draft_reply_max_length: 500
+
+  # Seconds between polling cycles (when running in continuous mode).
+  polling_interval: 60

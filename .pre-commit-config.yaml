@@ -1,0 +1,75 @@
+# Pre-commit hooks for email-agent
+#
+# Enforces code quality and security policies.
+# See PLAN.md §12 "Never Send" Enforcement for details.
+#
+# Installation:
+#   uv run pre-commit install
+#
+# Manual run:
+#   uv run pre-commit run --all-files
+
+repos:
+  # -----------------------------------------------------------------------
+  # Local hook: Enforce "never send" policy
+  # -----------------------------------------------------------------------
+  # This hook uses pygrep (not ruff) because ruff does not have a built-in
+  # rule for detecting .send( calls. This is the primary enforcement mechanism
+  # for the "never send automatically" policy.
+  # See: https://pre-commit.com/#pygrep
+  - repo: local
+    hooks:
+      - id: no-send
+        name: Forbid .send( calls
+        description: >
+          Enforces the "never send automatically" policy by detecting
+          any .send( calls in the source code. The email agent only creates
+          drafts - never sends emails automatically.
+        language: pygrep
+        entry: '\.send\('
+        files: '^src/'
+        exclude_types:
+          - markdown
+          - yaml
+          - json
+          - text
+
+  # -----------------------------------------------------------------------
+  # Ruff: Linting and formatting
+  # -----------------------------------------------------------------------
+  # Fast Python linter written in Rust. Replaces flake8, isort, black.
+  # See: https://docs.astral.sh/ruff/
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.8.0"
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # -----------------------------------------------------------------------
+  # MyPy: Static type checking
+  # -----------------------------------------------------------------------
+  # Static type checker for Python. Catches type errors before runtime.
+  # See: https://mypy.readthedocs.io/
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: "v1.13.0"
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - pydantic>=2.0.0
+          - pydantic-settings>=2.0.0
+          - structlog>=24.0.0
+          - tenacity>=8.0.0
+        args: [--strict, --ignore-missing-imports]
+
+  # -----------------------------------------------------------------------
+  # Trailing whitespace fixer
+  # -----------------------------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v4.5.0"
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=5000']
