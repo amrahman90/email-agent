@@ -88,6 +88,23 @@ jobs:
           uv sync --all-extras --dev
           uv pip install -e . --no-build
 
+      - name: Diagnose package installation
+        run: |
+          echo "=== Installed email packages ==="
+          uv pip list | grep -i email || echo "(none)"
+          echo ""
+          echo "=== email_agent package location ==="
+          python -c "import email_agent; print('__file__:', email_agent.__file__)"
+          echo ""
+          echo "=== email_agent state import ==="
+          python -c "import email_agent.state; print('state.__file__:', email_agent.state.__file__)" || echo "FAILED"
+          echo ""
+          echo "=== email_agent directory contents ==="
+          ls -la email_agent/
+          echo ""
+          echo "=== email_agent/state directory ==="
+          ls -la email_agent/state/
+
       - name: Run pytest
         run: |
           uv run pytest tests/ --cov=email_agent --cov-report=term-missing --cov-report=xml
