@@ -63,11 +63,13 @@ def test_half_open_success_closes_circuit(
     circuit_breaker: CircuitBreaker, mocker: MockerFixture
 ) -> None:
     """Verify success in HALF-OPEN transitions to CLOSED."""
+    mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
+    mock_time.monotonic.return_value = 1000.0
+
     for _ in range(5):
         circuit_breaker.record_failure()
 
     cb = circuit_breaker
-    mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
     mock_time.monotonic.return_value = cb._opened_at + 60.0  # type: ignore[operator]
     _ = circuit_breaker.state
 
@@ -79,11 +81,13 @@ def test_half_open_failure_reopens_circuit(
     circuit_breaker: CircuitBreaker, mocker: MockerFixture
 ) -> None:
     """Verify failure in HALF-OPEN transitions back to OPEN."""
+    mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
+    mock_time.monotonic.return_value = 1000.0
+
     for _ in range(5):
         circuit_breaker.record_failure()
 
     cb = circuit_breaker
-    mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
     mock_time.monotonic.return_value = cb._opened_at + 60.0  # type: ignore[operator]
     _ = circuit_breaker.state
 
