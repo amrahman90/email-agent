@@ -90,6 +90,18 @@ jobs:
 
       - name: Diagnose package installation
         run: |
+          echo "=== Checkout directory ==="
+          pwd && ls -la
+          echo ""
+          echo "=== Git status of email_agent/state ==="
+          git ls-files email_agent/state/ || echo "(not a git repo)"
+          echo ""
+          echo "=== All git-tracked files in email_agent ==="
+          git ls-files email_agent/ || echo "(not a git repo)"
+          echo ""
+          echo "=== email_agent directory - all subdirs ==="
+          find email_agent -maxdepth 1 -type d | sort
+          echo ""
           echo "=== Installed email packages ==="
           uv pip list | grep -i email || echo "(none)"
           echo ""
@@ -103,7 +115,7 @@ jobs:
           ls -la email_agent/
           echo ""
           echo "=== email_agent/state directory ==="
-          ls -la email_agent/state/
+          ls -la email_agent/state/ 2>/dev/null || echo "MISSING"
 
       - name: Run pytest
         run: |
