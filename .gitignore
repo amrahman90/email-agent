@@ -90,7 +90,7 @@ credentials/
 token.json
 
 # Project-specific: runtime state
-state/
+/state/
 *.log
 
 # Project-specific: local config (use config.yaml.example as template)
