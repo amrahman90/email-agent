@@ -95,13 +95,15 @@ def test_time_based_transition_open_to_half_open(
     circuit_breaker: CircuitBreaker, mocker: MockerFixture
 ) -> None:
     """Verify OPEN transitions to HALF-OPEN after open_duration elapses."""
+    mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
+    mock_time.monotonic.return_value = 1000.0
+
     for _ in range(5):
         circuit_breaker.record_failure()
 
     assert circuit_breaker.state == CircuitState.OPEN
 
     cb = circuit_breaker
-    mock_time = mocker.patch("email_agent.ollama.circuit_breaker.time")
     mock_time.monotonic.return_value = cb._opened_at + 60.0  # type: ignore[operator]
 
     _ = circuit_breaker.state
